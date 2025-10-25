@@ -28,7 +28,7 @@ func initDB() {
 }
 
 type Task struct {
-	ID     int64  `gorm:"primaryKey" json:"id"`
+	ID     uint   `gorm:"primaryKey;autoIncrement" json:"id"`
 	Task   string `json:"task"`
 	Status string `json:"status"`
 }
@@ -55,16 +55,7 @@ func postTask(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
 
-	var ids int64
-
-	if err := db.Model(&Task{}).Count(&ids).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to count tasks"})
-	}
-
-	ids++
-
 	task := Task{
-		ID:     ids,
 		Task:   req.Task,
 		Status: req.Status,
 	}
