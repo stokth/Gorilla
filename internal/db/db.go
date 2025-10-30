@@ -1,7 +1,6 @@
 package db
 
 import (
-	"Gorilla/internal/tasks"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -17,10 +16,6 @@ func InitDB() (*gorm.DB, error) {
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
-	}
-
-	if err := db.AutoMigrate(&tasks.Task{}); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
 	}
 
 	return db, nil
