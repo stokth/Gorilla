@@ -22,14 +22,11 @@ func main() {
 	taskService := tasks.NewTasksService(taskRepo)
 	h := handlers.NewTasksHandlers(taskService)
 
+	strictHandler := tasks.NewStrictHandler(h, nil)
+	tasks.RegisterHandlers(c, strictHandler)
+
 	c.Use(middleware.CORS())
 	c.Use(middleware.Logger())
-
-	c.GET("/tasks", h.GetTask)
-	c.GET("/tasks/:id", h.GetTaskById)
-	c.POST("/tasks", h.PostTask)
-	c.PATCH("/tasks/:id", h.PatchTask)
-	c.DELETE("/tasks/:id", h.DeleteTask)
 
 	c.Start("localhost:8080")
 }

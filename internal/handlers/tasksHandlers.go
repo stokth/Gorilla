@@ -2,10 +2,7 @@ package handlers
 
 import (
 	"Gorilla/internal/tasks"
-	"net/http"
-	"strconv"
-
-	"github.com/labstack/echo/v4"
+	"context"
 )
 
 type TasksHandlers struct {
@@ -16,89 +13,101 @@ func NewTasksHandlers(service tasks.TasksService) TasksHandlers {
 	return TasksHandlers{service: service}
 }
 
-func (h *TasksHandlers) GetTask(c echo.Context) error {
-	tasks, err := h.service.GetTasks()
+// GetTasks implements tasks.StrictServerInterface.
+func (h TasksHandlers) GetTasks(ctx context.Context, request tasks.GetTasksRequestObject) (tasks.GetTasksResponseObject, error) {
+	allTasks, err := h.service.GetTasks()
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to fetch tasks"})
+		return nil, err
 	}
 
-	return c.JSON(http.StatusOK, tasks)
+	response := tasks.GetTasks200JSONResponse{}
+
+	for _, task := range allTasks {
+		tsk := tasks.TaskModel{
+			Id:     &task.ID,
+			Task:   &task.Task,
+			Status: &task.Status,
+		}
+		response = append(response, tsk)
+	}
+
+	return response, nil
 }
 
-func (h *TasksHandlers) GetTaskById(c echo.Context) error {
-	id := c.Param("id")
+// GetTasksId implements tasks.StrictServerInterface.
+func (h TasksHandlers) GetTasksId(ctx context.Context, request tasks.GetTasksIdRequestObject) (tasks.GetTasksIdResponseObject, error) {
+	id := request.Id
 
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
-	}
-
-	task, err := h.service.GetTask(idInt)
+	task, err := h.service.GetTask(id)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to fetch task"})
+		return nil, err
 	}
 
-	return c.JSON(http.StatusOK, task)
+	return tasks.GetTasksId200JSONResponse{
+		Id:     &task.ID,
+		Task:   &task.Task,
+		Status: &task.Status,
+	}, nil
 }
 
-func (h *TasksHandlers) PostTask(c echo.Context) error {
-	var req tasks.TaskRequest
+// PostTasks implements tasks.StrictServerInterface.
+func (h TasksHandlers) PostTasks(ctx context.Context, request tasks.PostTasksRequestObject) (tasks.PostTasksResponseObject, error) {
+	taskReq := request.Body
 
-	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	taskToCreate := tasks.Task{
+		Task:   *taskReq.Task,
+		Status: *taskReq.Status,
 	}
 
-	tsk, err := h.service.CreateTask(tasks.Task{
-		Task:   req.Task,
-		Status: req.Status,
-	})
+	createdTask, err := h.service.CreateTask(taskToCreate)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create task"})
+		return nil, err
 	}
 
-	return c.JSON(http.StatusCreated, tsk)
+	response := tasks.PostTasks201JSONResponse{
+		Id:     &createdTask.ID,
+		Task:   &createdTask.Task,
+		Status: &createdTask.Status,
+	}
+
+	return response, nil
 }
 
-func (h *TasksHandlers) PatchTask(c echo.Context) error {
-	id := c.Param("id")
+// PatchTasksId implements tasks.StrictServerInterface.
+func (h TasksHandlers) PatchTasksId(ctx context.Context, request tasks.PatchTasksIdRequestObject) (tasks.PatchTasksIdResponseObject, error) {
+	id := request.Id
 
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	taskReq := request.Body
+
+	taskToUpdate := tasks.Task{
+		Task:   *taskReq.Task,
+		Status: *taskReq.Status,
 	}
 
-	var req tasks.TaskRequest
-
-	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
-	}
-
-	updadeTask, err := h.service.UpdateTask(idInt, tasks.Task{
-		Task:   req.Task,
-		Status: req.Status,
-	})
+	updatedTask, err := h.service.UpdateTask(id, taskToUpdate)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to update task"})
+		return nil, err
 	}
 
-	return c.JSON(http.StatusOK, updadeTask)
+	response := tasks.PatchTasksId200JSONResponse{
+		Task:   &updatedTask.Task,
+		Status: &updatedTask.Status,
+	}
+
+	return response, nil
 }
 
-func (h *TasksHandlers) DeleteTask(c echo.Context) error {
-	id := c.Param("id")
+// DeleteTasksId implements tasks.StrictServerInterface.
+func (h TasksHandlers) DeleteTasksId(ctx context.Context, request tasks.DeleteTasksIdRequestObject) (tasks.DeleteTasksIdResponseObject, error) {
+	id := request.Id
 
-	idInt, err := strconv.Atoi(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	if err := h.service.DeleteTask(id); err != nil {
+		return nil, err
 	}
 
-	if err := h.service.DeleteTask(idInt); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete task"})
-	}
-
-	return c.NoContent(http.StatusNoContent)
+	return nil, nil
 }
