@@ -28,5 +28,7 @@ func main() {
 	c.Use(middleware.CORS())
 	c.Use(middleware.Logger())
 
-	c.Start("localhost:8080")
+	if err := c.Start("localhost:8080"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

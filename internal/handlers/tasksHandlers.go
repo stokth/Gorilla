@@ -39,7 +39,7 @@ func (h TasksHandlers) GetTasks(ctx context.Context, request tasks.GetTasksReque
 func (h TasksHandlers) GetTasksId(ctx context.Context, request tasks.GetTasksIdRequestObject) (tasks.GetTasksIdResponseObject, error) {
 	id := request.Id
 
-	task, err := h.service.GetTask(id)
+	task, err := h.service.GetTask(int64(id))
 
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (h TasksHandlers) PostTasks(ctx context.Context, request tasks.PostTasksReq
 		Status: *taskReq.Status,
 	}
 
-	createdTask, err := h.service.CreateTask(taskToCreate)
+	createdTask, err := h.service.CreateTask(&taskToCreate)
 
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (h TasksHandlers) PatchTasksId(ctx context.Context, request tasks.PatchTask
 		Status: *taskReq.Status,
 	}
 
-	updatedTask, err := h.service.UpdateTask(id, taskToUpdate)
+	updatedTask, err := h.service.UpdateTask(int64(id), &taskToUpdate)
 
 	if err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (h TasksHandlers) PatchTasksId(ctx context.Context, request tasks.PatchTask
 func (h TasksHandlers) DeleteTasksId(ctx context.Context, request tasks.DeleteTasksIdRequestObject) (tasks.DeleteTasksIdResponseObject, error) {
 	id := request.Id
 
-	if err := h.service.DeleteTask(id); err != nil {
+	if err := h.service.DeleteTask(int64(id)); err != nil {
 		return nil, err
 	}
 
