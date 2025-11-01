@@ -94,6 +94,7 @@ func (h TasksHandlers) PatchTasksId(ctx context.Context, request tasks.PatchTask
 	}
 
 	response := tasks.PatchTasksId200JSONResponse{
+		Id:     &updatedTask.ID,
 		Task:   &updatedTask.Task,
 		Status: &updatedTask.Status,
 	}
