@@ -4,6 +4,7 @@ import (
 	"Gorilla/internal/db"
 	"Gorilla/internal/handlers"
 	"Gorilla/internal/tasks"
+	"Gorilla/internal/users"
 	"log"
 
 	"github.com/labstack/echo/v4"
@@ -20,10 +21,17 @@ func main() {
 
 	taskRepo := tasks.NewTasksRepository(database)
 	taskService := tasks.NewTasksService(taskRepo)
-	h := handlers.NewTasksHandlers(taskService)
+	t := handlers.NewTasksHandlers(taskService)
 
-	strictHandler := tasks.NewStrictHandler(h, nil)
-	tasks.RegisterHandlers(c, strictHandler)
+	strictTaskHandler := tasks.NewStrictHandler(t, nil)
+	tasks.RegisterHandlers(c, strictTaskHandler)
+
+	userRepo := users.NewUsersRepository(database)
+	userService := users.NewUsersService(userRepo)
+	u := handlers.NewUsersHandlers(userService)
+
+	strictUserHandler := users.NewStrictHandler(u, nil)
+	users.RegisterHandlers(c, strictUserHandler)
 
 	c.Use(middleware.CORS())
 	c.Use(middleware.Logger())

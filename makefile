@@ -21,6 +21,10 @@ migrate-down:
 gen:
 	oapi-codegen -config openapi/.openapi -include-tags tasks -package tasks openapi/openapi.yaml > ./internal/tasks/api.gen.go
 
+# Генерация кода users
+gen-users:
+	oapi-codegen -config openapi/.openapi -include-tags users -package users openapi/openapi.yaml > ./internal/users/api.gen.go
+
 # Проверка кода
 lint:
 	golangci-lint run --color=auto
