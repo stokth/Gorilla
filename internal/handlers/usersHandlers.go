@@ -78,8 +78,8 @@ func (h UsersHandlers) PostUsers(ctx context.Context, request users.PostUsersReq
 		Email:     &createdUser.Email,
 		Password:  &createdUser.Password,
 		CreatedAt: &createdUser.Created_At,
-		UpdatedAt: &createdUser.Updated_At,
-		DeletedAt: &createdUser.Deleted_At,
+		UpdatedAt: nil,
+		DeletedAt: nil,
 	}
 
 	return response, nil
