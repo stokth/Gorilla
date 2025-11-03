@@ -9,6 +9,30 @@ type UsersHandlers struct {
 	service users.UsersService
 }
 
+// GetUsersIdTasks implements users.StrictServerInterface.
+func (h UsersHandlers) GetUsersIdTasks(ctx context.Context, request users.GetUsersIdTasksRequestObject) (users.GetUsersIdTasksResponseObject, error) {
+	id := request.Id
+	allTasksForUsers, err := h.service.GetTasksForUser(int64(id))
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := users.GetUsersIdTasks200JSONResponse{}
+
+	for _, user := range allTasksForUsers {
+		usrTsk := users.TaskModel{
+			Id:     &user.ID,
+			Task:   &user.Task,
+			Status: &user.Status,
+			UserId: &user.UserID,
+		}
+		response = append(response, usrTsk)
+	}
+
+	return response, nil
+}
+
 func NewUsersHandlers(service users.UsersService) UsersHandlers {
 	return UsersHandlers{service: service}
 }

@@ -1,6 +1,9 @@
 package users
 
-import "time"
+import (
+	"Gorilla/internal/tasks"
+	"time"
+)
 
 type User struct {
 	ID         int64     `gorm:"primaryKey;autoIncrement" json:"id"`
@@ -9,6 +12,7 @@ type User struct {
 	Created_At time.Time `gorm:"autoCreateTime" json:"created_at"`
 	Deleted_At time.Time `json:"deleted_at"`
 	Updated_At time.Time `json:"updated_at"`
+	Tasks      []tasks.Task
 }
 
 type UserRequest struct {

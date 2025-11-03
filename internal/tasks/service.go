@@ -28,6 +28,7 @@ func (s *taskService) CreateTask(task *Task) (*Task, error) {
 	tsk := Task{
 		Task:   task.Task,
 		Status: task.Status,
+		UserID: task.UserID,
 	}
 
 	if err := s.repo.CreateTask(&tsk); err != nil {

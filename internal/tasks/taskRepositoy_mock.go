@@ -9,6 +9,11 @@ type MockTaskRepository struct {
 	mock.Mock
 }
 
+// GetTasksByUserId implements TasksRepository.
+func (m *MockTaskRepository) GetTasksByUserId(id int64) ([]Task, error) {
+	panic("unimplemented")
+}
+
 // DeleteTask implements TasksRepository.
 func (m *MockTaskRepository) DeleteTask(id int64) error {
 	args := m.Called(id)

@@ -19,12 +19,14 @@ type TaskModel struct {
 	Id     *int64  `json:"id,omitempty"`
 	Status *string `json:"status,omitempty"`
 	Task   *string `json:"task,omitempty"`
+	UserId *int64  `json:"user_id,omitempty"`
 }
 
 // TaskRequestModel defines model for TaskRequestModel.
 type TaskRequestModel struct {
 	Status *string `json:"status,omitempty"`
 	Task   *string `json:"task,omitempty"`
+	UserId *int64  `json:"user_id,omitempty"`
 }
 
 // PostTasksJSONRequestBody defines body for PostTasks for application/json ContentType.

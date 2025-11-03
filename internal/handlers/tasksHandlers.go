@@ -28,6 +28,7 @@ func (h TasksHandlers) GetTasks(ctx context.Context, request tasks.GetTasksReque
 			Id:     &task.ID,
 			Task:   &task.Task,
 			Status: &task.Status,
+			UserId: &task.UserID,
 		}
 		response = append(response, tsk)
 	}
@@ -59,6 +60,7 @@ func (h TasksHandlers) PostTasks(ctx context.Context, request tasks.PostTasksReq
 	taskToCreate := tasks.Task{
 		Task:   *taskReq.Task,
 		Status: *taskReq.Status,
+		UserID: *taskReq.UserId,
 	}
 
 	createdTask, err := h.service.CreateTask(&taskToCreate)
@@ -71,6 +73,7 @@ func (h TasksHandlers) PostTasks(ctx context.Context, request tasks.PostTasksReq
 		Id:     &createdTask.ID,
 		Task:   &createdTask.Task,
 		Status: &createdTask.Status,
+		UserId: &createdTask.UserID,
 	}
 
 	return response, nil

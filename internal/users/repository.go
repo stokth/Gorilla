@@ -1,6 +1,10 @@
 package users
 
-import "gorm.io/gorm"
+import (
+	"Gorilla/internal/tasks"
+
+	"gorm.io/gorm"
+)
 
 type UsersRepository interface {
 	GetUsers() ([]User, error)
@@ -8,6 +12,7 @@ type UsersRepository interface {
 	CreateUser(user *User) error
 	UpdateUser(user *User) error
 	DeleteUser(id int64) error
+	GetTasksForUser(id int64) ([]tasks.Task, error)
 }
 
 type userRepository struct {
@@ -16,6 +21,13 @@ type userRepository struct {
 
 func NewUsersRepository(db *gorm.DB) UsersRepository {
 	return &userRepository{db: db}
+}
+
+func (u *userRepository) GetTasksForUser(id int64) ([]tasks.Task, error) {
+	var tasks []tasks.Task
+	err := u.db.Where("user_id = ?", id).Find(&tasks).Error
+	return tasks, err
+
 }
 
 // CreateUser implements UsersRepository.

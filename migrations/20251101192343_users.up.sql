@@ -3,6 +3,9 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
-    updated_at TIMESTAMP
+    deleted_at TIMESTAMP DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT NULL
 );
+
+ALTER TABLE tasks ADD COLUMN user_id INTEGER REFERENCES users(id)
+ON DELETE CASCADE;

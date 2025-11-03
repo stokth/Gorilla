@@ -1,6 +1,9 @@
 package users
 
-import "time"
+import (
+	"Gorilla/internal/tasks"
+	"time"
+)
 
 type UsersService interface {
 	GetUsers() ([]User, error)
@@ -8,6 +11,7 @@ type UsersService interface {
 	CreateUser(user *User) (*User, error)
 	UpdateUser(id int64, user *User) (*User, error)
 	DeleteUser(id int64) error
+	GetTasksForUser(id int64) ([]tasks.Task, error)
 }
 
 type userService struct {
@@ -16,6 +20,11 @@ type userService struct {
 
 func NewUsersService(repo UsersRepository) UsersService {
 	return &userService{repo: repo}
+}
+
+// GetTasksForUser implements UsersService.
+func (u *userService) GetTasksForUser(id int64) ([]tasks.Task, error) {
+	return u.repo.GetTasksForUser(id)
 }
 
 // CreateUser implements UsersService.
