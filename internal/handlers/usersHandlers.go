@@ -108,7 +108,7 @@ func (h UsersHandlers) PatchUsersId(ctx context.Context, request users.PatchUser
 		Password:  &updatedTask.Password,
 		CreatedAt: &updatedTask.Created_At,
 		UpdatedAt: &updatedTask.Updated_At,
-		DeletedAt: &updatedTask.Deleted_At,
+		DeletedAt: nil,
 	}
 
 	return response, nil
