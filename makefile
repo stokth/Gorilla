@@ -3,18 +3,7 @@
 # Переменные которые будут использоваться в наших командах (Таргетах)
 DB_DSN := "postgres://postgres:root@localhost:5432/postgres?sslmode=disable"
 MIGRATE := migrate -path ./migrations -database $(DB_DSN)
-PROTOS  := ./project-protos/proto/*.proto
-OUT_DIR := .
 
-# Генерации .proto файлов
-generate:
-	protoc \
-		--go_out=$(OUT_DIR) --go_opt=paths=source_relative \
-		--go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
-		$(PROTOS)
-
-clean:
-	find . -name "*.pb.go" -delete
 # Таргет для создания новой миграции
 migrate-new:
 	migrate create -ext sql -dir ./migrations ${NAME}
