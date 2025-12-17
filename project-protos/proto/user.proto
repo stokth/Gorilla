@@ -1,0 +1,65 @@
+syntax = "proto3";
+package user;
+option go_package = "github.com/stokth/Gorilla/project-protos/proto/user";
+
+// Сущность пользователь (минимум полей)
+message User {
+  int64 id    = 1;
+  string email = 2;
+}
+
+// Запрос на создание
+message CreateUserRequest {
+  string email = 1;
+}
+message CreateUserResponse {
+  User user = 1;
+}
+
+// Запрос на получени определенного User
+message GetUserRequest {
+    int64 id = 1;
+}
+message GetUserResponse {
+    User user = 1;
+}
+
+// Запрос на получение всех Users
+message GetUsersRequest {
+}
+message GetUsersResponce {
+    repeated User users = 1;
+}
+
+// Обновить юзера
+message UpdateUserRequest {
+    int64 id = 1;
+    string email = 2;
+}
+message UpdateUserResponce {
+    User user = 1;
+}
+
+//Удалить юзера
+message DeleteUserRequest {
+    int64 id = 1;
+}
+message DeleteUserResponce {
+}
+
+// Получить все таски опред. юзера
+message GetTaskForUserRequest {
+    int64 id = 1;
+}
+message GetTaskForUserResponce {
+    repeated Task tasks = 1;
+}
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUser    (GetUserRequest)              returns (GetUserResponse);
+  rpc GetUsers   (GetUsersRequest) returns (GetUsersResponce);
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponce);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponce);
+  rpc GetTasksForUser (GetTaskForUserRequest) returns (GetTaskForUserResponce);
+}

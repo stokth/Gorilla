@@ -1,0 +1,58 @@
+syntax = "proto3";
+package task;
+option go_package = "github.com/stokth/Gorilla/project-protos/proto/task";
+
+// Сущность задача
+message Task {
+  int64 id      = 1;
+  string task   = 2;
+}
+
+// Запрос на создание задачи
+message CreateTaskRequest {
+  string task = 1;
+}
+message CreateTaskResponse {
+  Task task = 1;
+}
+
+// Запрос на получение задачи
+message GetTaskRequest {
+    int64 id = 1;
+}
+message GetTaskResponce {
+    Task task = 1;
+}
+
+// Запрос на получение всех задач
+message GetTasksRequest {
+
+}
+message GetTasksResponce {
+    repeated Task tasks = 1;
+}
+
+// Запрос на обновление задачи
+message UpdateTaskRequest {
+    int64 id = 1;
+    string task = 2;
+}
+message UpdateTaskResponce {
+    Task task = 1;
+}
+
+// Запрос на удаление задачи
+message DeleteTaskRequest {
+    int64 id = 1;
+}
+message DeleteTaskResponce {
+
+}
+
+service TaskService {
+  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
+  rpc GetTask    (GetTaskRequest)             returns (GetTaskResponce);
+  rpc GetTasks (GetTasksRequest) returns (GetTasksResponce);
+  rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponce);
+  rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskResponce)
+} 
