@@ -8,6 +8,11 @@ message User {
   string email = 2;
 }
 
+message Task {
+  int64 id      = 1;
+  string task   = 2;
+}
+
 // Запрос на создание
 message CreateUserRequest {
   string email = 1;
@@ -27,7 +32,7 @@ message GetUserResponse {
 // Запрос на получение всех Users
 message GetUsersRequest {
 }
-message GetUsersResponce {
+message GetUsersResponse {
     repeated User users = 1;
 }
 
@@ -36,7 +41,7 @@ message UpdateUserRequest {
     int64 id = 1;
     string email = 2;
 }
-message UpdateUserResponce {
+message UpdateUserResponse {
     User user = 1;
 }
 
@@ -44,22 +49,22 @@ message UpdateUserResponce {
 message DeleteUserRequest {
     int64 id = 1;
 }
-message DeleteUserResponce {
+message DeleteUserResponse {
 }
 
 // Получить все таски опред. юзера
 message GetTaskForUserRequest {
     int64 id = 1;
 }
-message GetTaskForUserResponce {
+message GetTaskForUserResponse {
     repeated Task tasks = 1;
 }
 
 service UserService {
   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
   rpc GetUser    (GetUserRequest)              returns (GetUserResponse);
-  rpc GetUsers   (GetUsersRequest) returns (GetUsersResponce);
-  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponce);
-  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponce);
-  rpc GetTasksForUser (GetTaskForUserRequest) returns (GetTaskForUserResponce);
+  rpc GetUsers   (GetUsersRequest) returns (GetUsersResponse);
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+  rpc GetTasksForUser (GetTaskForUserRequest) returns (GetTaskForUserResponse);
 }

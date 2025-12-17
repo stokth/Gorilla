@@ -20,7 +20,7 @@ message CreateTaskResponse {
 message GetTaskRequest {
     int64 id = 1;
 }
-message GetTaskResponce {
+message GetTaskResponse {
     Task task = 1;
 }
 
@@ -28,7 +28,7 @@ message GetTaskResponce {
 message GetTasksRequest {
 
 }
-message GetTasksResponce {
+message GetTasksResponse {
     repeated Task tasks = 1;
 }
 
@@ -37,7 +37,7 @@ message UpdateTaskRequest {
     int64 id = 1;
     string task = 2;
 }
-message UpdateTaskResponce {
+message UpdateTaskResponse {
     Task task = 1;
 }
 
@@ -45,14 +45,14 @@ message UpdateTaskResponce {
 message DeleteTaskRequest {
     int64 id = 1;
 }
-message DeleteTaskResponce {
+message DeleteTaskResponse {
 
 }
 
 service TaskService {
   rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
-  rpc GetTask    (GetTaskRequest)             returns (GetTaskResponce);
-  rpc GetTasks (GetTasksRequest) returns (GetTasksResponce);
-  rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponce);
-  rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskResponce)
+  rpc GetTask    (GetTaskRequest)             returns (GetTaskResponse);
+  rpc GetTasks (GetTasksRequest) returns (GetTasksResponse);
+  rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskResponse);
+  rpc DeleteTask (DeleteTaskRequest) returns (DeleteTaskResponse);
 } 
