@@ -1,4 +1,4 @@
-module github.com/stokth/Gorilla/project-protos
+module github.com/stokth/Gorilla/project-prot
 
 go 1.25.5
 
